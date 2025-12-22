@@ -74,7 +74,7 @@ with tab1:
   with col1:
     Date=st.date_input("Date", format="DD/MM/YYYY", width='stretch', key='val2')
   with col2:
-    Expiry=st.date_input("Expiry",format="DD/MM/YYYY", width='stretch', key='val3')
+    Expiry=st.date_input("Expiry",format="DD/MM/YYYY", value='23/12/2025',width='stretch', key='val3')
   with col3:
     spot=int(st.number_input("Please give spot price", key='spot1', value=26000, step=100))
   with col4:
@@ -290,6 +290,7 @@ with tab4:
        
     
   
+
 
 
 
