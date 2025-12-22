@@ -10,7 +10,8 @@ from pathlib import Path
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None) 
 
 pd.options.mode.copy_on_write = True
-expirynifty=dt.date(2025,12,23) 
+
+expirynifty=datetime.date(2025,12,23) 
 
 
 # defining functions
@@ -292,6 +293,7 @@ with tab4:
        
     
   
+
 
 
 
