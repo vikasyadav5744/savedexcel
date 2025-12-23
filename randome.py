@@ -71,7 +71,7 @@ def color_background_red(val):
   
 # visualiazation / interpretation of data
 
-tab1, tab2, tab3=st.tabs(["Today's NIFTY", "Addition to Master File", "Historical"])
+tab1, tab2, tab3, tab4=st.tabs(["Today's NIFTY", "Addition to Master File", "Historical", "others"])
 with tab1:
   data = st.file_uploader("csv file upload", key='upload1')
   col1, col2, col3, col4, col5, col6=st.columns(6)
@@ -258,6 +258,14 @@ with tab3:
   
 # adding data to master file 
 
+with tab4:
+    multy = st.file_uploader("csv file upload", key='multy1')
+    if multy not None:
+        rept =pd.read_csv(multy)
+        st.write(rept)
+        nest= rept.drop_duplicates(inplace=True)
+        return st.write(nest)
+        
 
             
     
@@ -268,6 +276,7 @@ with tab3:
        
     
   
+
 
 
 
