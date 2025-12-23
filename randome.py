@@ -122,7 +122,7 @@ with tab1:
        
       df1=df1.style.apply(highlight_second_highest,subset=['CALL_OI','PUT_OI','CALL_VOLUME','PUT_VOLUME','CALL_CHNG','PUT_CHNG']).map(color_two, subset=['STRIKE']).format(precision=0).map(color_all, subset=['ceper','peper','Spot_Price', 'ceprice', 'peprice', 'cvper','pvper']).format(precision=2, subset=['Time']).map(color_background_red, subset=['CALL_LTP', 'PUT_LTP'])
       
-      st.dataframe(df1, hide_index=True, width =600, height=900, column_order=['Time','ceper','CALL_CHNG','CALL_OI','CALL_VOLUME','cvper','ceprice','STRIKE','peprice','pvper','PUT_VOLUME','PUT_OI','PUT_CHNG','peper','PCRval'], use_container_width=True)
+      st.dataframe(df1, hide_index=True, width =600, height=900, column_order=['Time','CALL_LTP', 'CALL_CHNG','ceper','CALL_CHNG','CALL_OI','CALL_VOLUME','cvper','ceprice','STRIKE','peprice','pvper','PUT_VOLUME','PUT_OI','PUT_CHNG','peper','PCRval','PUT_CHNG', 'PUT_LTP'], use_container_width=True)
                     
 #     bar chart coding
       df2=df.copy()
@@ -294,6 +294,7 @@ with tab4:
        
     
   
+
 
 
 
