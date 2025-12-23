@@ -260,7 +260,7 @@ with tab3:
 
 with tab4:
     multy = st.file_uploader("csv file upload", key='multy1')
-    if multy not None:
+    if multy!= None:
         rept =pd.read_csv(multy)
         st.write(rept)
         nest= rept.drop_duplicates(inplace=True)
@@ -276,6 +276,7 @@ with tab4:
        
     
   
+
 
 
 
