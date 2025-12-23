@@ -141,7 +141,6 @@ with tab1:
       with col3:
           st.bar_chart(data_refined, x='STRIKE', y=['CALL_CHNG', 'PUT_CHNG'], color=['#B62626', '#26B669'], stack=False)
 
-
 # adding data to master file 
 with tab2:
     col1, col2=st.columns(2)
@@ -154,6 +153,7 @@ with tab2:
         combined_df = pd.concat(df_list, ignore_index=True)
         data2=pd.read_csv(data_two)
         merged_df = pd.concat([combined_df,data2], ignore_index=True)
+        merged_df=merged_df.drop_duplicates(keep='first')
         # download button
         csv1=merged_df.to_csv().encode("utf-8")
         st.download_button(label="Download master CSV", data=csv1, file_name="master_file.csv", mime="text/csv",icon=":material/download:",key="donw223")
@@ -294,6 +294,7 @@ with tab4:
        
     
   
+
 
 
 
