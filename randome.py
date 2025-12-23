@@ -6,7 +6,6 @@ import datetime as dt
 import os
 import csv
 from pathlib import Path
-import matplotlib.pyplot as plt
 
 # change the main file name from here
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None) 
@@ -246,7 +245,6 @@ with tab3:
         with col1:
             strike_0= st.selectbox("select the begning STRIKE", options=strikes, key='strike0', index=tel3_strike)
             strike_detail0 =newdata[newdata['STRIKE']==strike_0][['Time','CALL_OI', 'PUT_OI','CALL_CHNG', 'PUT_CHNG']]
-            strike_detail0=strike_detail0.style.background_gradient(cmap='Oranges', subset=['CALL_OI','CALL_CHNG'])
             st.dataframe(strike_detail0,hide_index=True)
         with col2:
             strike_one= st.selectbox("select the begning STRIKE", options=strikes, key='strike', index=tel4_strike)
@@ -270,6 +268,7 @@ with tab3:
        
     
   
+
 
 
 
