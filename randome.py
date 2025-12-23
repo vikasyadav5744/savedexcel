@@ -71,7 +71,7 @@ def color_background_red(val):
   
 # visualiazation / interpretation of data
 
-tab1, tab2, tab3, tab4=st.tabs(["Today's NIFTY", "Addition to Master File", "Historical", "computer file"])
+tab1, tab2, tab3=st.tabs(["Today's NIFTY", "Addition to Master File", "Historical"])
 with tab1:
   data = st.file_uploader("csv file upload", key='upload1')
   col1, col2, col3, col4, col5, col6=st.columns(6)
@@ -258,33 +258,8 @@ with tab3:
         
   
 # adding data to master file 
-with tab4:
-  master=st.toggle("Get Master File")
-  # master=st.checkbox("Get Master file", key='check1')
-  if master==True:
-    col1, col2=st.columns(2)
-    with col1:
-      data1 = st.file_uploader("csv file upload", key='upload2')
-    with col2:
-      data2 = st.file_uploader("upload_master file", key='upload3')
-    if data1!=None and data2!=None:
-      data1=pd.read_csv(data1)
-      data2=pd.read_csv(data2)
-      merged_df = pd.concat([data1,data2], ignore_index=True)
-      st.write(merged_df)
-      # download button
-      csv1=merged_df.to_csv().encode("utf-8")
-      st.download_button(label="Download master CSV", data=csv1, file_name="master_file.csv", mime="text/csv",icon=":material/download:",key="donw2")
-      #ends here
 
-      target_folder = "C:/Users/Dell/Desktop/master_file"     # Change this path
-      if st.button('Save CSV to Specific Folder'):
-          # Create folder if it doesn't exist
-          if not os.path.exists(target_folder):
-              os.makedirs(target_folder)
-              file_path = os.path.join(target_folder, "master_file.csv")
-              merged_df.to_csv(file_path, index=False)
-              st.success(f"File saved successfully at {file_path}")
+
             
     
 
@@ -294,6 +269,7 @@ with tab4:
        
     
   
+
 
 
 
