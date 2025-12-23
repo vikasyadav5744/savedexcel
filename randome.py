@@ -152,10 +152,9 @@ with tab2:
         df_list = [pd.read_csv(f) for f in data_one]
         combined_df = pd.concat(df_list, ignore_index=True)
         data2=pd.read_csv(data_two)
-        merged_df = pd.concat([combined_df,data2], ignore_index=True)
-        merged=merged_df.drop_duplicates(inplace=True)
+        merged_df = pd.concat([combined_df,data2], ignore_index=True).drop_duplicates(inplace=True)
         # download button
-        csv1=merged.to_csv().encode("utf-8")
+        csv1=merged_df.to_csv().encode("utf-8")
         st.download_button(label="Download master CSV", data=csv1, file_name="master_file.csv", mime="text/csv",icon=":material/download:",key="donw223")
         st.write(merged_df)
 
@@ -294,6 +293,7 @@ with tab4:
        
     
   
+
 
 
 
