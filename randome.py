@@ -164,6 +164,7 @@ with tab3:
     if newdata is not None:
         newdata=pd.read_csv(newdata, encoding='latin_1')
         newdata=newdata.drop_duplicates(inplace=True)
+        st.write(newdata)
         timeopt = newdata.Time.unique()
         timesel=st.selectbox("select time from here", key='select1', options=timeopt)
         newdata1=newdata[newdata.Time==timesel]
@@ -295,6 +296,7 @@ with tab4:
        
     
   
+
 
 
 
