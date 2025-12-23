@@ -119,7 +119,6 @@ with tab1:
       strike2 = round1+upperval
       df=df[df.STRIKE.between(strike1,strike2)]
       df1=df.copy()
-      st.write(df1.columns)
       df1=df1.style.apply(highlight_second_highest,subset=['CALL_OI','PUT_OI','CALL_VOLUME','PUT_VOLUME','CALL_CHNG','PUT_CHNG']).map(color_two, subset=['STRIKE']).format(precision=0).map(color_all, subset=['ceper','peper','Spot_Price', 'ceprice', 'peprice', 'cvper','pvper']).format(precision=2, subset=['Time'])
       
       st.dataframe(df1, hide_index=True, width =600, height=900, column_order=['Time','ceper','CALL_CHNG','CALL_OI','CALL_VOLUME','cvper','ceprice','STRIKE','peprice','pvper','PUT_VOLUME','PUT_OI','PUT_CHNG','peper','PCRval'], use_container_width=True)
@@ -269,6 +268,7 @@ with tab3:
        
     
   
+
 
 
 
