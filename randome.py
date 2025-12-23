@@ -102,7 +102,6 @@ with tab1:
     df['Overall_Pcr']=(df['Sum_PE'] / df['Sum_CE'])
     
     main_data=df.copy()
-  
     # download button
     csv=df.to_csv().encode("utf-8")
     st.download_button(label="Download CSV", data=csv, file_name="data.csv", mime="text/csv",icon=":material/download:", key="donw1")        
@@ -276,6 +275,7 @@ with tab4:
        
     
   
+
 
 
 
