@@ -264,7 +264,7 @@ with tab4:
         rept =pd.read_csv(multy)
         st.write(rept)
         nest= rept.drop_duplicates(inplace=True)
-        return st.write(nest)
+        st.write(nest)
         
 
             
@@ -276,6 +276,7 @@ with tab4:
        
     
   
+
 
 
 
