@@ -107,7 +107,7 @@ with tab1:
     st.write(fullname)
     # download button
     # if code does not work remove below line
-    df101=df[['CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
+    df101=df[['STRIKE','CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
     csv=df101.to_csv().encode("utf-8")
     st.download_button(label="Download CSV", data=csv, file_name=fullname, mime="text/csv",icon=":material/download:", key="donw1") 
     st.write(main_data)
@@ -163,7 +163,7 @@ with tab2:
         fullname1=name2+name21+name22
         st.write(fullname1)
         # if code does not work remove below line
-        merged_df1=merged_df[['CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
+        merged_df1=merged_df[['STRIKE','CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
         csv1=merged_df1.to_csv().encode("utf-8")
         st.download_button(label="Download master CSV", data=csv1, file_name=fullname1, mime="text/csv",icon=":material/download:",key="donw223")
         st.write(merged_df1)        
@@ -281,6 +281,7 @@ with tab4:
        
     
   
+
 
 
 
