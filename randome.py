@@ -181,13 +181,8 @@ with tab3:
             strike1= round1-500
             strike2 = round1+500
             st.write(strike1,strike2, spot2)
-            st.write("newdata0 specfic time below")
-            st.write(newdata0)
             newdata2=newdata0[newdata0.STRIKE.between(strike1,strike2)]
-            st.write("newdata2 betn strikes below")
-            st.write(newdata2)
             df2=newdata2.style.apply(highlight_second_highest,subset=['CALL_OI','PUT_OI','CALL_VOLUME','PUT_VOLUME','CALL_CHNG','PUT_CHNG']).map(color_two, subset=['STRIKE']).format(precision=0).map(color_all, subset=['ceper','peper','Spot_Price', 'ceprice', 'peprice', 'cvper','pvper']).format(precision=2, subset=['Time']).map(color_background_red, subset=['CHNG', 'CHNG.1']).map(color_all, subset=['CALL_LTP', 'PUT_LTP'])
-            st.write(df2)
             st.dataframe(df2, hide_index=True, width =600, height=600, column_order=['Time','CALL_LTP','CHNG','ceper','CALL_CHNG','CALL_OI','CALL_VOLUME','cvper','ceprice','STRIKE','peprice','pvper','PUT_VOLUME','PUT_OI','PUT_CHNG','peper','PCRval', 'Spot_Price','CHNG.1','PUT_LTP'], use_container_width=True)
     
             strikes = list(newdata.STRIKE.unique())
@@ -285,6 +280,7 @@ with tab4:
        
     
   
+
 
 
 
