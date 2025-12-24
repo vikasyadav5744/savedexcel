@@ -106,6 +106,8 @@ with tab1:
     fullname=name+name1+name2
     st.write(fullname)
     # download button
+    # if code does not work remove below line
+    df=df[['CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
     csv=df.to_csv().encode("utf-8")
     st.download_button(label="Download CSV", data=csv, file_name=fullname, mime="text/csv",icon=":material/download:", key="donw1") 
     st.write(main_data)
@@ -278,6 +280,7 @@ with tab4:
        
     
   
+
 
 
 
