@@ -175,23 +175,20 @@ with tab3:
         timeopt = newdata.Time.unique()
         timesel=st.selectbox("select time from here", key='select1', options=timeopt)
         newdata0=newdata[newdata.Time==timesel]
-        st.write(newdata0)
-        newdata1=newdata0.reindex()
-        st.write(newdata1)
-        spot2 =newdata1.Spot_Price.iloc[0]
+        spot2 =newdata0.Spot_Price.iloc[0]
         if spot2>0:
             round1 =spot2.round(-2)
             strike1= round1-500
             strike2 = round1+500
             st.write(strike1,strike2, spot2)
-            st.write(newdata1)
-            newdata2=newdata1[newdata1.STRIKE.between(strike1,strike2)]
+            st.write(newdata0)
+            newdata2=newdata0[newdata0.STRIKE.between(strike1,strike2)]
             df2=newdata2.style.apply(highlight_second_highest,subset=['CALL_OI','PUT_OI','CALL_VOLUME','PUT_VOLUME','CALL_CHNG','PUT_CHNG']).map(color_two, subset=['STRIKE']).format(precision=0).map(color_all, subset=['ceper','peper','Spot_Price', 'ceprice', 'peprice', 'cvper','pvper']).format(precision=2, subset=['Time']).map(color_background_red, subset=['CHNG', 'CHNG.1']).map(color_all, subset=['CALL_LTP', 'PUT_LTP'])
             st.dataframe(df2, hide_index=True, width =600, height=600, column_order=['Time','CALL_LTP','CHNG','ceper','CALL_CHNG','CALL_OI','CALL_VOLUME','cvper','ceprice','STRIKE','peprice','pvper','PUT_VOLUME','PUT_OI','PUT_CHNG','peper','PCRval', 'Spot_Price', 'CHNG.1','PUT_LTP'], use_container_width=True)
     
             strikes = list(newdata.STRIKE.unique())
             col1, col2, col3, col4, col5, col6=st.columns(6)
-            spot_price = newdata1.Spot_Price.iloc[0].round(-2)
+            spot_price = newdata0.Spot_Price.iloc[0].round(-2)
             tel1_strike=strikes.index(spot_price-200)
             tel2_strike=strikes.index(spot_price-100)
             tel3_strike=strikes.index(spot_price-50)
@@ -284,6 +281,7 @@ with tab4:
        
     
   
+
 
 
 
