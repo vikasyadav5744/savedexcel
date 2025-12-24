@@ -267,7 +267,7 @@ with tab4:
     new101 = st.file_uploader("csv file upload", key='new101')
     if new101 is not None:
         newd=pd.read_csv(new101, encoding='latin_1')
-        st.write(newd.dtypes)
+        st.write(list(newd.dtypes))
         
 
             
@@ -279,6 +279,7 @@ with tab4:
        
     
   
+
 
 
 
