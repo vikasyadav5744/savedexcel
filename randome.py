@@ -179,8 +179,8 @@ with tab3:
         upperval1=st.number_input("upper value", step=100, value=500, key='ups1')
         if spot2>0:
             round1 =spot2.round(-2)
-            strike1= round1-500
-            strike2 = round1+500
+            strike1= round1-upperval1
+            strike2 = round1+upperval1
             st.write(strike1,strike2, spot2)
             newdata2=newdata0[newdata0.STRIKE.between(strike1,strike2)]
             df2=newdata2.style.apply(highlight_second_highest,subset=['CALL_OI','PUT_OI','CALL_VOLUME','PUT_VOLUME','CALL_CHNG','PUT_CHNG']).map(color_two, subset=['STRIKE']).format(precision=0).map(color_all, subset=['ceper','peper','Spot_Price', 'ceprice', 'peprice', 'cvper','pvper']).format(precision=2, subset=['Time']).map(color_background_red, subset=['CHNG', 'CHNG.1']).map(color_all, subset=['CALL_LTP', 'PUT_LTP'])
@@ -281,6 +281,7 @@ with tab4:
        
     
   
+
 
 
 
