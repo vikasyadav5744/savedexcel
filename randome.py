@@ -107,8 +107,8 @@ with tab1:
     st.write(fullname)
     # download button
     # if code does not work remove below line
-    df=df[['CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
-    csv=df.to_csv().encode("utf-8")
+    df101=df[['CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
+    csv=df101.to_csv().encode("utf-8")
     st.download_button(label="Download CSV", data=csv, file_name=fullname, mime="text/csv",icon=":material/download:", key="donw1") 
     st.write(main_data)
     spot1 =df.Spot_Price[0]
@@ -124,8 +124,8 @@ with tab1:
       strike2 = round1+upperval
       df=df[df.STRIKE.between(strike1,strike2)]
       df1=df.copy()
-      df1=df1.style.apply(highlight_second_highest,subset=['CALL_OI','PUT_OI','CALL_VOLUME','PUT_VOLUME','CALL_CHNG','PUT_CHNG']).map(color_two, subset=['STRIKE']).format(precision=0).map(color_all, subset=['ceper','peper','Spot_Price', 'ceprice', 'peprice', 'cvper','pvper']).format(precision=2, subset=['Time']).map(color_background_red, subset=['CHNG', 'CHNG.1']).map(color_all, subset=['CALL_LTP', 'PUT_LTP'])    
-      st.dataframe(df1, hide_index=True, width =600, height=600, column_order=['Time','CALL_LTP','CHNG','ceper','CALL_CHNG','CALL_OI','CALL_VOLUME','cvper','ceprice','STRIKE','peprice','pvper','PUT_VOLUME','PUT_OI','PUT_CHNG','peper','PCRval', 'Spot_Price','CHNG.1','PUT_LTP'], use_container_width=True)
+      df2=df1.style.apply(highlight_second_highest,subset=['CALL_OI','PUT_OI','CALL_VOLUME','PUT_VOLUME','CALL_CHNG','PUT_CHNG']).map(color_two, subset=['STRIKE']).format(precision=0).map(color_all, subset=['ceper','peper','Spot_Price', 'ceprice', 'peprice', 'cvper','pvper']).format(precision=2, subset=['Time']).map(color_background_red, subset=['CHNG', 'CHNG.1']).map(color_all, subset=['CALL_LTP', 'PUT_LTP'])    
+      st.dataframe(df2, hide_index=True, width =600, height=600, column_order=['Time','CALL_LTP','CHNG','ceper','CALL_CHNG','CALL_OI','CALL_VOLUME','cvper','ceprice','STRIKE','peprice','pvper','PUT_VOLUME','PUT_OI','PUT_CHNG','peper','PCRval', 'Spot_Price','CHNG.1','PUT_LTP'], use_container_width=True)
                     
 #     bar chart coding
       df2=df.copy()
@@ -163,10 +163,10 @@ with tab2:
         fullname1=name2+name21+name22
         st.write(fullname1)
         # if code does not work remove below line
-        merged_df=merged_df[['CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
-        csv1=merged_df.to_csv().encode("utf-8")
+        merged_df1=merged_df[['CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
+        csv1=merged_df1.to_csv().encode("utf-8")
         st.download_button(label="Download master CSV", data=csv1, file_name=fullname1, mime="text/csv",icon=":material/download:",key="donw223")
-        st.write(merged_df)        
+        st.write(merged_df1)        
 
 with tab3:
     newdata = st.file_uploader("csv file upload", key='newdata1')
@@ -174,8 +174,8 @@ with tab3:
         newdata=pd.read_csv(newdata, encoding='latin_1')
         timeopt = newdata.Time.unique()
         timesel=st.selectbox("select time from here", key='select1', options=timeopt)
-        newdata1=newdata[newdata.Time==timesel]
-        newdata1=newdata1.reindex()
+        newdata0=newdata[newdata.Time==timesel]
+        newdata1=newdata0.reindex()
         spot2 =newdata1.Spot_Price.iloc[0]
         if spot2>0:
             round1 =spot2.round(-2)
@@ -282,6 +282,7 @@ with tab4:
        
     
   
+
 
 
 
