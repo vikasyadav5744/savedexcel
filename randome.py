@@ -99,7 +99,7 @@ with tab1:
     df['Sum_CE']=(df['CALL_OI'].sum())
     df['Sum_PE']=(df['PUT_OI'].sum())
     df['Overall_Pcr']=(df['Sum_PE'] / df['Sum_CE'])
-    main_data=df.copy()[['CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
+    main_data=df.copy()[['STRIKE','CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
     name=str(df.Time.iloc[0]).replace('.','_')
     name1=str('_data')
     name2=str('.csv')
@@ -110,7 +110,7 @@ with tab1:
     df101=df[['STRIKE','CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
     csv=df101.to_csv().encode("utf-8")
     st.download_button(label="Download CSV", data=csv, file_name=fullname, mime="text/csv",icon=":material/download:", key="donw1") 
-    st.write(main_data)
+    st.write(df101)
     spot1 =df.Spot_Price[0]
     if spot1>0:
       round1 =spot1.round(-2)
@@ -281,6 +281,7 @@ with tab4:
        
     
   
+
 
 
 
