@@ -110,7 +110,6 @@ with tab1:
     df101=df[['STRIKE','CHNG','CHNG.1','CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
     csv=df101.to_csv().encode("utf-8")
     st.download_button(label="Download CSV", data=csv, file_name=fullname, mime="text/csv",icon=":material/download:", key="donw1") 
-    st.write(df101)
     spot1 =df.Spot_Price[0]
     if spot1>0:
       round1 =spot1.round(-2)
@@ -118,7 +117,6 @@ with tab1:
       call=df['Sum_CE'].iloc[0]
       pcr= df['Overall_Pcr'].iloc[0]
       st.write(put, call,pcr)
-            
       upperval=st.number_input("upper value", step=100, value=500, key='up1')
       strike1= round1-upperval
       strike2 = round1+upperval
@@ -281,6 +279,7 @@ with tab4:
        
     
   
+
 
 
 
