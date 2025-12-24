@@ -175,7 +175,9 @@ with tab3:
         timeopt = newdata.Time.unique()
         timesel=st.selectbox("select time from here", key='select1', options=timeopt)
         newdata0=newdata[newdata.Time==timesel]
+        st.write(newdata0)
         newdata1=newdata0.reindex()
+        st.write(newdata1)
         spot2 =newdata1.Spot_Price.iloc[0]
         if spot2>0:
             round1 =spot2.round(-2)
@@ -282,6 +284,7 @@ with tab4:
        
     
   
+
 
 
 
