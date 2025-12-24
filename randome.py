@@ -153,7 +153,7 @@ with tab2:
         df_list = [pd.read_csv(f) for f in data_one]
         combined_df = pd.concat(df_list, ignore_index=True)
         data2=pd.read_csv(data_two)
-        merged_df = pd.concat([combined_df,data2], ignore_index=True)
+        merged_df = pd.concat([combined_df,data2], ignore_index=True).sort_values(by='Time'], ascending=False)
         # download button
         name2=str(merged_df.Time.iloc[0]).replace('.','_')
         name21=str('_master_File')
@@ -282,6 +282,7 @@ with tab4:
        
     
   
+
 
 
 
