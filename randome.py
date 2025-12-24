@@ -172,6 +172,7 @@ with tab3:
     newdata = st.file_uploader("csv file upload", key='newdata1')
     if newdata is not None:
         newdata=pd.read_csv(newdata, encoding='latin_1')
+        st.write(newdata)
         timeopt = newdata.Time.unique()
         timesel=st.selectbox("select time from here", key='select1', options=timeopt)
         newdata0=newdata[newdata.Time==timesel]
@@ -281,6 +282,7 @@ with tab4:
        
     
   
+
 
 
 
