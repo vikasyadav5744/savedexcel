@@ -264,12 +264,10 @@ with tab3:
 # adding data to master file 
 
 with tab4:
-    multy = st.file_uploader("csv file upload", key='multy1')
-    if multy!= None:
-        rept =pd.read_csv(multy)
-        st.write(rept)
-        nest= rept.drop_duplicates(inplace=True)
-        st.write(nest)
+    new101 = st.file_uploader("csv file upload", key='new101')
+    if new101 is not None:
+        newd=pd.read_csv(new101, encoding='latin_1')
+        st.write(newd.dtypes)
         
 
             
@@ -281,6 +279,7 @@ with tab4:
        
     
   
+
 
 
 
