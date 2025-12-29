@@ -24,14 +24,6 @@ def sell01(val):
         return 'Buy'
     else:
         return 'Overbought'
-
-
-# highlight row
-def highlight_row1(df):
-    if df['STRIKE'] == df.Spot_Price[0]:
-        return ['background-color:#D1B8CB'] *len(df)   
-    else:
-        return [''] *len(df)
         
 def highlight_status(val):
     if val == "Oversold":
@@ -287,6 +279,7 @@ with tab4:
        
     
   
+
 
 
 
