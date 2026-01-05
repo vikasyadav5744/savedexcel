@@ -174,7 +174,7 @@ with tab3:
         name31=str(newdata.Time.iloc[0]).replace('.','_')
         name32=str('_removed_dupli')
         name33=str('.csv')
-        fullname31=name2+name21+name22
+        fullname31=name31+name32+name33
         csv12=newdata.to_csv().encode("utf-8")
         st.download_button(label="Download CSV", data=csv12, file_name=fullname31, mime="text/csv",icon=":material/download:", key="donw121") 
         timeopt = newdata.Time.unique()
@@ -286,6 +286,7 @@ with tab4:
        
     
   
+
 
 
 
