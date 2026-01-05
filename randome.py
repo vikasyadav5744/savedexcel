@@ -171,6 +171,12 @@ with tab3:
     if newdata is not None:
         newdata=pd.read_csv(newdata, encoding='latin_1')
         newdata = newdata.drop_duplicates(subset=['Time', 'STRIKE'], keep='first', ignore_index=True)
+        name31=str(newdata.Time.iloc[0]).replace('.','_')
+        name32=str('_removed_dupli')
+        name33=str('.csv')
+        fullname31=name2+name21+name22
+        csv12=newdata.to_csv().encode("utf-8")
+        st.download_button(label="Download CSV", data=csv12, file_name=fullname31, mime="text/csv",icon=":material/download:", key="donw121") 
         timeopt = newdata.Time.unique()
         timesel=st.selectbox("select time from here", key='select1', options=timeopt)
         newdata0=newdata[newdata.Time==timesel]
@@ -280,6 +286,7 @@ with tab4:
        
     
   
+
 
 
 
