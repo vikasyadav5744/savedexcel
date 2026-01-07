@@ -116,8 +116,13 @@ with tab1:
       put=df['Sum_PE'].iloc[0]
       call=df['Sum_CE'].iloc[0]
       pcr= df['Overall_Pcr'].iloc[0]
-      st.write(put, call,pcr)
-      upperval=st.number_input("upper value", step=100, value=500, key='up1')
+      col1, col2, col3 = st.columns(3)
+      with col1:
+          st.write(put, call,pcr)
+      with col2:
+          upperval=st.number_input("upper value", step=100, value=500, key='up1')
+      with col3:
+          st.write(df.Spot_Price.iloc[0])
       strike1= round1-upperval
       strike2 = round1+upperval
       df=df[df.STRIKE.between(strike1,strike2)]
@@ -286,6 +291,7 @@ with tab4:
        
     
   
+
 
 
 
