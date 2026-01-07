@@ -75,12 +75,14 @@ with tab1:
   data = st.file_uploader("csv file upload", key='upload1')
   col1, col2, col3, col4, col5, col6=st.columns(6)
   with col1:
-    Date=st.date_input("Date", format="DD/MM/YYYY", width='stretch', key='val2')
+    upperval=st.number_input("upper value", step=100, value=500, key='up1')
   with col2:
-    Expiry=st.date_input("Expiry",format="DD/MM/YYYY", width='stretch', key='val3', value=expirynifty)
+    Date=st.date_input("Date", format="DD/MM/YYYY", width='stretch', key='val2')
   with col3:
-    spot=int(st.number_input("Please give spot price", key='spot1', value=26000, step=100))
+    Expiry=st.date_input("Expiry",format="DD/MM/YYYY", width='stretch', key='val3', value=expirynifty)
   with col4:
+    spot=int(st.number_input("Please give spot price", key='spot1', value=26000, step=100))
+  with col5:
     Time=st.number_input("Please give time", key='time1')
   if data!=None:
     df=pd.read_csv(data, skiprows=1, usecols=['OI', 'CHNG IN OI', 'VOLUME', 'IV', 'LTP', 'CHNG','BID QTY', 'BID', 'ASK', 'ASK QTY', 'STRIKE', 'BID QTY.1', 'BID.1','ASK.1', 'ASK QTY.1', 'CHNG.1', 'LTP.1','IV.1', 'VOLUME.1','CHNG IN OI.1', 'OI.1'])
@@ -109,19 +111,18 @@ with tab1:
     # if code does not work remove below line
     df101=df[['STRIKE','CHNG','CHNG.1','CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
     csv=df101.to_csv().encode("utf-8")
-    st.download_button(label="Download CSV", data=csv, file_name=fullname, mime="text/csv",icon=":material/download:", key="donw1") 
+    with col6:
+        st.download_button(label="Download CSV", data=csv, file_name=fullname, mime="text/csv",icon=":material/download:", key="donw1") 
     spot1 =df.Spot_Price[0]
     if spot1>0:
       round1 =spot1.round(-2)
       put=df['Sum_PE'].iloc[0]
       call=df['Sum_CE'].iloc[0]
       pcr= df['Overall_Pcr'].iloc[0]
-      col1, col2, col3 = st.columns(3)
+      col1, col2 = st.columns(2)
       with col1:
           st.write(put, call,pcr)
       with col2:
-          upperval=st.number_input("upper value", step=100, value=500, key='up1')
-      with col3:
           st.write(df.Spot_Price.iloc[0])
       strike1= round1-upperval
       strike2 = round1+upperval
@@ -279,89 +280,4 @@ with tab3:
 
 with tab4:
     st.write("codes for testing anything")
-    
-        
-
-            
-    
-
-
-
-    
-       
-    
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
