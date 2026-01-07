@@ -12,7 +12,7 @@ st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sideb
 
 pd.options.mode.copy_on_write = True
 
-expirynifty=dt.date(2026,1,6)      
+expirynifty=dt.date(2026,1,13)      
 
 # defining functions
 def sell01(val):
@@ -286,6 +286,7 @@ with tab4:
        
     
   
+
 
 
 
