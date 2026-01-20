@@ -12,7 +12,7 @@ st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sideb
 
 pd.options.mode.copy_on_write = True
 
-expirynifty=dt.date(2026,1,20)      
+expirynifty=dt.date(2026,1,27)      
 
 def color_01(row):
     # Check the 'chang' column to decide the color
@@ -65,20 +65,20 @@ def smax12(df, s):
     try:
         above_seven = int(df.loc[(df[s] >= (df[s].max()*0.75)) & (df[s] == (df[s].nlargest(2).iloc[-1])), 'STRIKE'].iloc[0])
         if (spot > maxs)& (above_seven !=0)&(above_seven > maxs):
-            return "WTT " + "- at " + ' ' + str(above_seven)
+            return "WTT " + "- at " + ' ' + str(above_seven) + ' '+ 'from'+ ' '+ str(maxs)
         elif (spot > maxs)& (above_seven !=0)&(above_seven > maxs) &(spot < above_seven):
-            return "WTT " + "- at " + ' ' + str(above_seven)
+            return "WTT " + "- at " + ' ' + str(above_seven)+ ' '+ 'from'+ ' '+ str(maxs)
         elif (spot > maxs)& (above_seven !=0)&(above_seven > maxs) &(spot > above_seven):
-            return "WTT " + "- at " + ' ' + str(above_seven) 
+            return "WTT " + "- at " + ' ' + str(above_seven) + ' '+ 'from'+ ' '+ str(maxs)
         elif (spot < maxs)& (above_seven !=0)&(above_seven > maxs) &(spot < above_seven):
-            return "WTT " + "- at " + ' ' + str(above_seven) 
+            return "WTT " + "- at " + ' ' + str(above_seven) + ' '+ 'from'+ ' '+ str(maxs)
         # WTB scenerioes 
         elif (spot < maxs)& (above_seven !=0)&(above_seven < maxs):
-            return "WTB " + "- at " + ' ' + str(above_seven)
+            return "WTB " + "- at " + ' ' + str(above_seven) + ' '+ 'from'+ ' '+ str(maxs)
         elif (spot > maxs)& (above_seven !=0)&(above_seven< maxs):
-            return "WTB " + "- at " + ' ' + str(above_seven)
+            return "WTB " + "- at " + ' ' + str(above_seven) + ' '+ 'from'+ ' '+ str(maxs)
         elif (spot < maxs)& (above_seven !=0)&(spot < above_seven):
-            return "WTB " + "- at " + ' ' + str(above_seven)  
+            return "WTB " + "- at " + ' ' + str(above_seven) + ' '+ 'from'+ ' '+ str(maxs)
     except:
         return "strong" + "- at " + ' ' + str(maxs)  
 
@@ -193,7 +193,7 @@ with tab1:
     fullname=name+name1+name2
     # download button
     # if code does not work remove below line
-    df101=df[['STRIKE','CHNG','CHNG.1','CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
+    df101=df[['IV','IV.1','volcesevent5str','volpesevent5str','pesevent5str','cesevent5str','volpemaxstr','volcemaxstr','pemaxstr','cemaxstr', 'ce_status','volce_status','pe_status','volpe_status','STRIKE','CHNG','CHNG.1','CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
     csv=df101.to_csv().encode("utf-8")
     with col6:
         st.download_button(label="Download CSV", data=csv, file_name=fullname, mime="text/csv",icon=":material/download:", key="donw1", width='stretch') 
@@ -242,8 +242,8 @@ with tab1:
       st.write('spot:', spot2,'Current Ressistance:', int(resis_range1), '-', int(resis_range2))
       st.write('spot:', spot2,'Current Support:', int(support_range1), '-', int(support_range2))
       st.write("option Chain")
-      df2=df1.style.apply(highlight_second_highest,subset=['CALL_OI','PUT_OI','CALL_VOLUME','PUT_VOLUME','CALL_CHNG','PUT_CHNG']).map(color_two, subset=['STRIKE']).format(precision=0).map(color_all, subset=['ceper','peper','Spot_Price', 'ceprice', 'peprice', 'cvper','pvper']).format(precision=2, subset=['Time']).map(color_background_red, subset=['CHNG', 'CHNG.1']).map(color_all, subset=['CALL_LTP', 'PUT_LTP'])        #.apply(highlight_row1, axis=1, subset=['STRIKE','ceprice', 'peprice', 'cvper', 'pvper'])    
-      st.dataframe(df2, hide_index=True, width ='stretch', height=600, column_order=['Time','volceprice', 'CALL_LTP','CHNG','ceper','CALL_CHNG','CALL_OI','CALL_VOLUME','cvper','ceprice','STRIKE','peprice','pvper','PUT_VOLUME','PUT_OI','PUT_CHNG','peper','PCRval', 'Spot_Price','CHNG.1','PUT_LTP', 'volpeprice'] )
+      df2=df1.style.apply(highlight_second_highest,subset=['CALL_OI','PUT_OI','CALL_VOLUME','PUT_VOLUME','CALL_CHNG','PUT_CHNG']).map(color_two, subset=['STRIKE']).format(precision=0).map(color_all, subset=['ceper','peper','Spot_Price', 'ceprice', 'peprice', 'cvper','pvper']).format(precision=2, subset=['Time']).map(color_background_red, subset=['CHNG', 'CHNG.1']).map(color_all, subset=['CALL_LTP', 'PUT_LTP', 'IV','IV.1'])        #.apply(highlight_row1, axis=1, subset=['STRIKE','ceprice', 'peprice', 'cvper', 'pvper'])    
+      st.dataframe(df2, hide_index=True, width ='stretch', height=600, column_order=['Time','IV', 'CALL_LTP','CHNG','ceper','CALL_CHNG','CALL_OI','CALL_VOLUME','cvper','ceprice','STRIKE','peprice','pvper','PUT_VOLUME','PUT_OI','PUT_CHNG','peper','PCRval', 'Spot_Price','CHNG.1','PUT_LTP', 'IV.1'] )
                     
 #     bar chart coding
       df2=df.copy()
@@ -282,11 +282,10 @@ with tab2:
         fullname1=name2+name21+name22
         st.write(fullname1)
         # if code does not work remove below line
-        merged_df1=merged_df[['STRIKE','CHNG','CHNG.1','CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
+        merged_df1=merged_df[['IV','IV.1','volcesevent5str','volpesevent5str','pesevent5str','cesevent5str','volpemaxstr','volcemaxstr','pemaxstr','cemaxstr', 'ce_status','volce_status','pe_status','volpe_status','STRIKE','CHNG','CHNG.1','CALL_OI','CALL_CHNG','CALL_VOLUME','PUT_VOLUME', 'PUT_CHNG','PUT_OI', 'CALL_LTP', 'PUT_LTP','ceper','peper','cvper','pvper','ceprice','peprice','Sum_CE','Sum_PE','Overall_Pcr','Time','Expiry','Date','Spot_Price']]
         csv1=merged_df1.to_csv().encode("utf-8")
         st.download_button(label="Download master CSV", data=csv1, file_name=fullname1, mime="text/csv",icon=":material/download:",key="donw223")
         st.write(merged_df1)        
-
 with tab3:
     newdata = st.file_uploader("csv file upload", key='newdata1')
     if newdata is not None:
@@ -381,8 +380,8 @@ with tab3:
             with col4:
                 st.write(f"""<div style="background-color:#7dc9aa; font-size:20px; padding:5px; border-radius: 5px;text-align: center; margin:3px;">VOLUME :- {dropping_dip.putvol_status.iloc[0]}</div>""", unsafe_allow_html=True)
  
-            df2=newdata2.style.apply(highlight_second_highest,subset=['CALL_OI','PUT_OI','CALL_VOLUME','PUT_VOLUME','CALL_CHNG','PUT_CHNG']).map(color_two, subset=['STRIKE']).format(precision=0).map(color_all, subset=['ceper','peper','Spot_Price', 'ceprice', 'peprice', 'cvper','pvper']).format(precision=2, subset=['Time']).map(color_background_red, subset=['CHNG', 'CHNG.1']).map(color_all, subset=['CALL_LTP', 'PUT_LTP'])      #.apply(highlight_row1, axis=1, subset=['STRIKE','ceprice', 'peprice', 'cvper', 'pvper'])
-            st.dataframe(df2, hide_index=True, width ='stretch', height=600, column_order=['Time','CALL_LTP','CHNG','ceper','CALL_CHNG','CALL_OI','CALL_VOLUME','cvper','ceprice','STRIKE','peprice','pvper','PUT_VOLUME','PUT_OI','PUT_CHNG','peper','PCRval', 'Spot_Price','CHNG.1','PUT_LTP'],)
+            df2=newdata2.style.apply(highlight_second_highest,subset=['CALL_OI','PUT_OI','CALL_VOLUME','PUT_VOLUME','CALL_CHNG','PUT_CHNG']).map(color_two, subset=['STRIKE']).format(precision=0).map(color_all, subset=['ceper','peper','Spot_Price', 'ceprice', 'peprice', 'cvper','pvper']).format(precision=2, subset=['Time']).map(color_background_red, subset=['CHNG', 'CHNG.1']).map(color_all, subset=['CALL_LTP', 'PUT_LTP','IV','IV.1'])      #.apply(highlight_row1, axis=1, subset=['STRIKE','ceprice', 'peprice', 'cvper', 'pvper'])
+            st.dataframe(df2, hide_index=True, width ='stretch', height=600, column_order=['Time','IV','CALL_LTP','CHNG','ceper','CALL_CHNG','CALL_OI','CALL_VOLUME','cvper','ceprice','STRIKE','peprice','pvper','PUT_VOLUME','PUT_OI','PUT_CHNG','peper','PCRval', 'Spot_Price','CHNG.1','PUT_LTP','IV.1'],)
             if show==True:
                 st.write(dropping_dip) 
             def top12(df, val):
@@ -505,8 +504,8 @@ with tab3:
             st.write( pcr_calc)
         with col2:
             st.line_chart(pcr_calc, x='Time', y=['Overall_Pcr'], color=['#26B669'])
-        
-        st.write(newdata)
+        L123 =newdata[['Time','ce_status', 'volce_status', 'Spot_Price','pe_status','volpe_status' ]].drop_duplicates()
+        st.write(L123)
         
         
 # adding data to master file 
@@ -514,3 +513,10 @@ with tab3:
 with tab4:
     st.write("please upload file in historical tab")
     # st.write(newdata[['Time','ce_status', 'volce_status', 'Spot_Price','pe_status','volpe_status' ]])
+    col1, col2=st.columns(2)
+    with col1:
+        but01 = st.link_button("Option Chain", url="https://www.nseindia.com//option-chain", type='primary', use_container_width=True)
+    with col2:
+        but02 = st.link_button("Sahi Platform", url="https://sahi.com/", type='primary',  use_container_width=True) 
+    
+       
