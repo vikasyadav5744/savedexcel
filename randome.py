@@ -309,6 +309,7 @@ with tab3:
         newdata['volcesevent5str']  = sevent5(newdata, 'CALL_VOLUME')
         newdata['pesevent5str'] = sevent5(newdata, 'PUT_OI')
         newdata['volpesevent5str'] =sevent5(newdata, 'PUT_VOLUME')
+        newdata['view'] =newdata['Overall_Pcr'].map(sell01)
         time_10= newdata.Time.unique()
         
         show=st.checkbox("show shifting")
@@ -457,13 +458,37 @@ with tab3:
                 chart_chng_data6=newdata[newdata['STRIKE']==chart_chng6][['Time','CALL_CHNG','PUT_CHNG']].sort_values(by='Time', ascending=False)
                 st.line_chart(chart_chng_data6, x='Time', y=['CALL_CHNG', 'PUT_CHNG'], color=['#B62626', '#26B669'])
         
-        def background(df):
-            macs=[''] * len(df)
-            if df['ce_chang'] < 0:
-                macs[0] = ['background-color:red; color: black']
-            elif df['ce_chang'] > 0:
-                macs[0] =  ['background-color:green; color: black']
-            return macs
+        def apply_color(df):
+            # Create a DataFrame of empty strings
+            style_df = pd.DataFrame('', index=df.index, columns=df.columns)
+            # Set colors only for the 'ce_chang' column
+            style_df['CALL_OI'] = np.where(df['ce_chang'] < 0, 'background-color: #ed785a', np.where(df['ce_chang'] > 0, 'background-color: #325939', 'background-color: #6f7a71'))
+            style_df['ce_chang'] = np.where(df['ce_chang'] < 0, 'background-color: #ed785a', np.where(df['ce_chang'] > 0, 'background-color: #79a37e', 'background-color: #6f7a71'))
+            return style_df
+
+        def apply_color1(df):
+            # Create a DataFrame of empty strings
+            style_df = pd.DataFrame('', index=df.index, columns=df.columns)
+            # Set colors only for the 'pe_chang' column
+            style_df['PUT_OI'] = np.where(df['pe_chang'] < 0, 'background-color: #ed785a', np.where(df['pe_chang'] > 0, 'background-color: #325939', 'background-color: #6f7a71'))
+            style_df['pe_chang'] = np.where(df['pe_chang'] < 0, 'background-color: #ed785a', np.where(df['pe_chang'] > 0, 'background-color: #79a37e', 'background-color: #6f7a71'))
+            return style_df
+
+        def apply_color3(df):
+            # Create a DataFrame of empty strings
+            style_df = pd.DataFrame('', index=df.index, columns=df.columns)
+            # Set colors only for the 'ce_chang' column
+            style_df['CALL_CHNG'] = np.where(df['ce_intra'] < 0, 'background-color: #ed785a', np.where(df['ce_intra'] > 0, 'background-color: #99c9cf', 'background-color: #6f7a71'))
+            style_df['ce_intra'] = np.where(df['ce_intra'] < 0, 'background-color: #ed785a', np.where(df['ce_intra'] > 0, 'background-color: #79a37e', 'background-color: #6f7a71'))
+            return style_df
+
+        def apply_color4(df):
+            # Create a DataFrame of empty strings
+            style_df = pd.DataFrame('', index=df.index, columns=df.columns)
+            # Set colors only for the 'ce_chang' column
+            style_df['PUT_CHNG'] = np.where(df['pe_intra'] < 0, 'background-color: #ed785a', np.where(df['pe_intra'] > 0, 'background-color:#99c9cf', 'background-color: #6f7a71'))
+            style_df['pe_intra'] = np.where(df['pe_intra'] < 0, 'background-color: #ed785a', np.where(df['pe_intra'] > 0, 'background-color: #79a37e', 'background-color: #6f7a71'))
+            return style_df
             
         col1, col2, col3=st.columns(3)
         with col1:
@@ -475,8 +500,9 @@ with tab3:
             strike_detail0['ce_intra'] =strike_detail0['CALL_CHNG'].diff().fillna(0)
             strike_detail0['pe_intra'] =strike_detail0['PUT_CHNG'].diff().fillna(0)
             strike_detail0 = strike_detail0.sort_values(by=['Time'], ascending= False)
-            #strike_detail0= strike_detail0.style.apply(background, axis=1)
-            st.dataframe(strike_detail0,hide_index=True, column_order=['Time','CALL_OI','ce_chang','PUT_OI', 'pe_chang', 'CALL_CHNG','ce_intra','PUT_CHNG','pe_intra'])
+            strike_detail0= strike_detail0.style.apply(apply_color, axis=None).apply(apply_color1, axis=None).apply(apply_color3, axis=None).apply(apply_color4, axis=None).format(precision=0).format(precision=2, subset=['Time'])
+            
+            st.dataframe(strike_detail0,hide_index=True, column_order=['Time','ce_chang','CALL_OI','PUT_OI', 'pe_chang', 'ce_intra', 'CALL_CHNG','PUT_CHNG','pe_intra'],height=400)
         with col2:
             strike_one= st.selectbox("select the begning STRIKE", options=strikes, key='strike', index=tel4_strike)
             strike_detail =newdata[newdata['STRIKE']==strike_one][['Time','CALL_OI', 'PUT_OI', 'CALL_CHNG', 'PUT_CHNG']]
@@ -486,7 +512,8 @@ with tab3:
             strike_detail['ce_intra'] =strike_detail['CALL_CHNG'].diff().fillna(0)
             strike_detail['pe_intra'] =strike_detail['PUT_CHNG'].diff().fillna(0)
             strike_detail = strike_detail.sort_values(by=['Time'], ascending= False)
-            st.dataframe(strike_detail, hide_index=True,  column_order=['Time','CALL_OI','ce_chang','PUT_OI', 'pe_chang', 'CALL_CHNG','ce_intra','PUT_CHNG','pe_intra'] )
+            strike_detail= strike_detail.style.apply(apply_color, axis=None).apply(apply_color1, axis=None).apply(apply_color3, axis=None).apply(apply_color4, axis=None).format(precision=0).format(precision=2, subset=['Time'])
+            st.dataframe(strike_detail, hide_index=True,  column_order=['Time','ce_chang','CALL_OI','PUT_OI', 'pe_chang', 'ce_intra', 'CALL_CHNG','PUT_CHNG','pe_intra'], height=400)
         with col3:
             strike_1= st.selectbox("select the begning STRIKE", options=strikes, key='strike1', index=tel5_strike)
             strike_detail1 =newdata[newdata['STRIKE']==strike_1][['Time','CALL_OI', 'PUT_OI','CALL_CHNG', 'PUT_CHNG']]
@@ -496,9 +523,23 @@ with tab3:
             strike_detail1['ce_intra'] =strike_detail1['CALL_CHNG'].diff().fillna(0)
             strike_detail1['pe_intra'] =strike_detail1['PUT_CHNG'].diff().fillna(0)
             strike_detail1 = strike_detail1.sort_values(by=['Time'], ascending= False)  
-            st.dataframe(strike_detail1,hide_index=True, column_order=['Time','CALL_OI','ce_chang','PUT_OI', 'pe_chang', 'CALL_CHNG','ce_intra','PUT_CHNG','pe_intra']  )   
+            strike_detail1= strike_detail1.style.apply(apply_color, axis=None).apply(apply_color1, axis=None).apply(apply_color3, axis=None).apply(apply_color4, axis=None).format(precision=0).format(precision=2, subset=['Time'])
+            st.dataframe(strike_detail1,hide_index=True, column_order=['Time','ce_chang','CALL_OI','PUT_OI', 'pe_chang', 'ce_intra', 'CALL_CHNG','PUT_CHNG','pe_intra'], height=400)   
+
+        def apply_color14(df):
+            # Create a DataFrame of empty strings
+            style_df = pd.DataFrame('', index=df.index, columns=df.columns)
+            # Set colors only for the 'ce_chang' column
+            style_df['view'] = np.where(df['view']== 'Buy', 'background-color: #ed785a', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
+            style_df['Sum_PE'] = np.where(df['view']== 'Buy', 'background-color: #ed785a', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
+            style_df['Sum_CE'] = np.where(df['view']== 'Buy', 'background-color: #ed785a', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
+            style_df['Overall_Pcr'] = np.where(df['view']== 'Buy', 'background-color: #ed785a', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
+            return style_df
+            
         st.write( "for getting clear view about market direction")
-        pcr_calc = newdata[['Time', 'Sum_PE', 'Sum_CE', 'Overall_Pcr']].drop_duplicates()
+        pcr_calc = newdata[['Time', 'Sum_PE', 'Sum_CE', 'Overall_Pcr','view']].drop_duplicates()
+        pcr_calc= pcr_calc.style.apply(apply_color14, axis=None).format(precision=0).format(precision=2, subset=['Time']).format(precision=3, subset=['Overall_Pcr'])
+        
         col1, col2=st.columns(2)
         with col1:
             st.write( pcr_calc)
