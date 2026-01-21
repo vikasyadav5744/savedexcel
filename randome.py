@@ -202,8 +202,14 @@ with tab1:
     put=int(df['Sum_PE'].iloc[0])
     call=int(df['Sum_CE'].iloc[0])
     pcr= df['Overall_Pcr'].iloc[0].round(3)
-    
-    st.write(f"""<div style="background-color: #5e7066; font-size:20px; padding: 25px; border-radius: 20px; text-align: center; margin:10px"> <p> PUT:({put})</p>  <p> PCR: ({pcr}) <p/> CALL: ({call})   </div>""", unsafe_allow_html=True)
+    col1, col2, col3= st.columns(3)
+    with col1:
+        st.write(f"""<div style="background-color: #5e7066; font-size:20px; padding: 25px; border-radius: 20px; text-align: center; margin:10px"> PUT:({put})  </div>""", unsafe_allow_html=True)
+    with col2:
+        st.write(f"""<div style="background-color: #5e7066; font-size:20px; padding: 25px; border-radius: 20px; text-align: center; margin:10px"> PCR: ({pcr}) </div>""", unsafe_allow_html=True)
+    with col3:
+        st.write(f"""<div style="background-color: #5e7066; color:pink; font-size:20px; padding: 25px; border-radius: 20px; text-align: center; margin:10px"> CALL: ({call}) </div>""", unsafe_allow_html=True)
+
     # WTT status 
     col1, col2 = st.columns(2)
     with col1:
@@ -547,7 +553,32 @@ with tab3:
             st.line_chart(pcr_calc, x='Time', y=['Overall_Pcr'], color=['#26B669'])
         L123 =newdata[['Time','ce_status', 'volce_status', 'Spot_Price','pe_status','volpe_status' ]].drop_duplicates()
         st.write(L123)
+        def nature(df,oi,vol,oi75,vol75):
+            spot= df['Spot_Price'].iloc[0]
+            both_max= df['oi'] == df['vol']
+            oi_gt= df['oi'] > df['vol']
+            vol_gt= df['vol'] > df['oi']
+            oi_wtt=(df['oi75'] != 0)& (df['oi'] < df['oi75'])
+            oi_wtb=(df['oi75'] != 0)& (df['oi'] > df['oi75'])
+            vol_wtt= (df['vol75'] != 0)& (df['vol'] < df['vol75'])
+            vol_wtb= (df['vol75'] != 0)& (df['vol'] > df['vol75'])
+            oi75_gt = df['oi75'] > df['vol75']
+            vol75_gt = df['vol75'] > df['oi75']
+            # when spot price is lessthan max/75
+            if (spot < oi)& ( spot < vol)& (oi_wtb) & (vol_wtt)& (both_max):
+                return 'OI WTB'
+            elif (spot < oi)& ( spot < vol)& (oi_wtt) & (vol_wtb)& (both_max):
+                return 'VOLUME WTB'
+            elif (spot < oi)& ( spot < vol)& (oi_wtb) & (vol_wtb)& (both_max):
+                return 'Both WTB'
+            elif (spot < oi)& ( spot < vol)& (oi_wtt) & (vol_wtt)& (both_max):
+                return 'OI WTT'
+            else:
+                return 'strong'
         
+        #newdata['resi_view'] = nature(newdata,'cemaxstr', 'volcemaxstr', 'cesevent5str', 'volcesevent5str')
+        #st.dataframe(newdata, column_order=['Time', 'resi_view'])
+    
         
 # adding data to master file 
 
