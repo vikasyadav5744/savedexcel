@@ -14,6 +14,37 @@ pd.options.mode.copy_on_write = True
 
 expirynifty=dt.date(2026,1,27)      
 
+
+def nature(df, oi, vol, oi75, vol75):
+    # Ensure we are looking at specific values, not columns
+    spot = df['Spot_Price'].iloc[0]
+    # Calculate boolean flags for the first row
+    # (Checking if current OI/Vol is the same, and if 75% levels exist)
+    is_both_max = (df['oi'].iloc[0] == df['vol'].iloc[0])
+        
+    oi_val = df['oi'].iloc[0]
+    oi75_val = df['oi75'].iloc[0]
+    vol_val = df['vol'].iloc[0]
+    vol75_val = df['vol75'].iloc[0]
+    # Flags for WTB (Weak Towards Bottom) and WTT (Weak Towards Top)
+    oi_wtb = (oi75_val != 0) and (oi_val > oi75_val)
+    oi_wtt = (oi75_val != 0) and (oi_val < oi75_val)
+    vol_wtb = (vol75_val != 0) and (vol_val > vol75_val)
+    vol_wtt = (vol75_val != 0) and (vol_val < vol75_val)
+    # Core Logic
+    # We only enter these checks if spot is below both thresholds and both are max
+    if (spot < oi) and (spot < vol) and is_both_max:
+        if oi_wtb and vol_wtt:
+            return 'OI WTB'
+        elif oi_wtt and vol_wtb:
+            return 'VOLUME WTB'
+        elif oi_wtb and vol_wtb:
+            return 'Both WTB'
+        elif oi_wtt and vol_wtt:
+            return 'OI WTT'
+        return 'strong'
+
+
 def color_01(row):
     # Check the 'chang' column to decide the color
     if row['chang'] > 0:
@@ -204,11 +235,11 @@ with tab1:
     pcr= df['Overall_Pcr'].iloc[0].round(3)
     col1, col2, col3= st.columns(3)
     with col1:
-        st.write(f"""<div style="background-color: #5e7066; font-size:20px; padding: 25px; border-radius: 20px; text-align: center; margin:10px"> PUT:({put})  </div>""", unsafe_allow_html=True)
+        st.write(f"""<div style="background-color: #5e7066; font-size:25px; padding: 15px; border-radius: 20px; text-align: center; margin:5px"> PUT:({put})  </div>""", unsafe_allow_html=True)
     with col2:
-        st.write(f"""<div style="background-color: #5e7066; font-size:20px; padding: 25px; border-radius: 20px; text-align: center; margin:10px"> PCR: ({pcr}) </div>""", unsafe_allow_html=True)
+        st.write(f"""<div style="background-color: #5e7066; font-size:25px; padding: 15px; border-radius: 20px; text-align: center; margin:5px"> PCR: ({pcr}) </div>""", unsafe_allow_html=True)
     with col3:
-        st.write(f"""<div style="background-color: #5e7066; color:pink; font-size:20px; padding: 25px; border-radius: 20px; text-align: center; margin:10px"> CALL: ({call}) </div>""", unsafe_allow_html=True)
+        st.write(f"""<div style="background-color: #5e7066; color:#660022; font-size:25px; padding: 15px; border-radius: 20px; text-align: center; margin:5px"> CALL: ({call}) </div>""", unsafe_allow_html=True)
 
     # WTT status 
     col1, col2 = st.columns(2)
@@ -318,7 +349,7 @@ with tab3:
         newdata['view'] =newdata['Overall_Pcr'].map(sell01)
         time_10= newdata.Time.unique()
         
-        show=st.checkbox("show shifting")
+       
         mf = newdata.copy()
         mf= mf.sort_values(by=['Time'])
         dropping_dip = mf.drop_duplicates()
@@ -331,6 +362,11 @@ with tab3:
         dropping_dip['putvol75_status']= dropping_dip['volpesevent5str'].diff().fillna(0).apply(shifting)
         dropping_dip['callvol75_status']= dropping_dip[ 'volcesevent5str'].diff().fillna(0).apply(shifting)
         dropping_dip =dropping_dip[['Time','cemaxstr','cesevent5str','volcemaxstr','volcesevent5str', 'pemaxstr','pesevent5str','volpemaxstr', 'volpesevent5str','calloi_status', 'callvol_status','putoi_status','putvol_status','call75_status','put75_status','putvol75_status','callvol75_status']].drop_duplicates()
+        OICE_state =newdata[['ce_status']].drop_duplicates()
+        OIPE_state =newdata[['pe_status']].drop_duplicates()
+        OICEVOL_state =newdata[['volce_status']].drop_duplicates()
+        OIPEVOL_state =newdata[['volpe_status']].drop_duplicates()
+
         col1, col2=st.columns(2)
         with col1:
             timeopt=newdata.Time.unique()
@@ -357,7 +393,17 @@ with tab3:
             support_range2= newdata2.loc[newdata2['STRIKE']==spot2, 'peprice'].iloc[0]
             st.write('spot:', spot2,'Current Ressistance:', int(resis_range1), '-', int(resis_range2))
             st.write('spot:', spot2,'Current Support:', int(support_range1), '-', int(support_range2))
-            st.write("option Chain")
+            
+            put=int(newdata2['Sum_PE'].iloc[0])
+            call=int(newdata2['Sum_CE'].iloc[0])
+            pcr= newdata2['Overall_Pcr'].iloc[0].round(3)
+            col1, col2, col3= st.columns(3)
+            with col1:
+                st.write(f"""<div style="background-color: #5e7066; font-size:20px; padding: 15px; border-radius: 20px; text-align: center; margin:5px"> PUT:({put})  </div>""", unsafe_allow_html=True)
+            with col2:
+                st.write(f"""<div style="background-color: #5e7066; font-size:20px; padding: 15px; border-radius: 20px; text-align: center; margin:5px"> PCR: ({pcr}) </div>""", unsafe_allow_html=True)
+            with col3:
+                st.write(f"""<div style="background-color: #5e7066; color:#660022; font-size:20px; padding: 15px; border-radius: 20px; text-align: center; margin:5px"> CALL: ({call}) </div>""", unsafe_allow_html=True)
             col1, col2 = st.columns(2)
             with col1:
                 st.write(f"""<div style="background-color: #871c30; font-size:20px; padding: 5px; border-radius: 5px;text-align: center; margin:3px;">Resistance</div>""", unsafe_allow_html=True)
@@ -370,7 +416,7 @@ with tab3:
             with col2:
                 st.write(f"""<div style="background-color: #871c30; font-size:20px; padding: 5px; border-radius: 5px;text-align: center; margin:3px;">VOLUME :-{newdata2.volce_status.iloc[0]}</div>""", unsafe_allow_html=True)
             with col3:
-                st.write(f"""<div style="background-color: #871c30; font-size:20px: padding: 5px; border-radius: 5px;text-align: center; margin:3px;">Spot :- {newdata2.Spot_Price.iloc[0]} </div>""", unsafe_allow_html=True)
+                st.write(f"""<div style="background-color: #871c30; font-size:22px; padding: 5px; border-radius: 5px;text-align: center; margin:3px;">Spot :- {newdata2.Spot_Price.iloc[0]} </div>""", unsafe_allow_html=True)
             with col4:
                 st.write(f"""<div style="background-color:#426e4b; font-size:20px; padding:5px; border-radius: 5px;text-align: center; margin:3px;">VOLUME :- {newdata2.volpe_status.iloc[0]}</div>""", unsafe_allow_html=True)
             with col5:
@@ -379,18 +425,17 @@ with tab3:
             #  nature of shifting
             col1, col2, col3, col4, = st.columns(4)
             with col1:
-                st.write(f"""<div style="background-color: #7dc9aa; font-size:20px; padding: 5px; border-radius: 5px; text-align: center; margin:3px;"> CALLs OI :- {dropping_dip.calloi_status.iloc[0]}</div>""", unsafe_allow_html=True)
+                st.write(f"""<div style="background-color: #916596; font-size:20px; padding: 5px; border-radius: 5px; text-align: center; margin:3px;"> {OICE_state.ce_status.iloc[0]}</div>""", unsafe_allow_html=True)
             with col2:
-                st.write(f"""<div style="background-color: #7dc9aa; font-size:20px; padding: 5px; border-radius: 5px;text-align: center; margin:3px;">VOLUME :-{dropping_dip.callvol_status.iloc[0]}</div>""", unsafe_allow_html=True)
+                st.write(f"""<div style="background-color: #916596; font-size:20px; padding: 5px; border-radius: 5px;text-align: center; margin:3px;">{OICEVOL_state.volce_status.iloc[0]}</div>""", unsafe_allow_html=True)
             with col3:
-                st.write(f"""<div style="background-color: #7dc9aa; font-size:20px; padding: 5px; border-radius: 5px;text-align: center; margin:3px;">PUTs OI:- {dropping_dip.putoi_status.iloc[0]} </div>""", unsafe_allow_html=True)
+                st.write(f"""<div style="background-color: #6d8a51; font-size:20px; padding: 5px; border-radius: 5px;text-align: center; margin:3px;">{OIPE_state.pe_status.iloc[0]} </div>""", unsafe_allow_html=True)
             with col4:
-                st.write(f"""<div style="background-color:#7dc9aa; font-size:20px; padding:5px; border-radius: 5px;text-align: center; margin:3px;">VOLUME :- {dropping_dip.putvol_status.iloc[0]}</div>""", unsafe_allow_html=True)
- 
+                st.write(f"""<div style="background-color:#6d8a51; font-size:20px; padding:5px; border-radius: 5px;text-align: center; margin:3px;"> {OIPEVOL_state.volpe_status.iloc[0]}</div>""", unsafe_allow_html=True)
+                
             df2=newdata2.style.apply(highlight_second_highest,subset=['CALL_OI','PUT_OI','CALL_VOLUME','PUT_VOLUME','CALL_CHNG','PUT_CHNG']).map(color_two, subset=['STRIKE']).format(precision=0).map(color_all, subset=['ceper','peper','Spot_Price', 'ceprice', 'peprice', 'cvper','pvper']).format(precision=2, subset=['Time']).map(color_background_red, subset=['CHNG', 'CHNG.1']).map(color_all, subset=['CALL_LTP', 'PUT_LTP','IV','IV.1'])      #.apply(highlight_row1, axis=1, subset=['STRIKE','ceprice', 'peprice', 'cvper', 'pvper'])
             st.dataframe(df2, hide_index=True, width ='stretch', height=600, column_order=['Time','IV','CALL_LTP','CHNG','ceper','CALL_CHNG','CALL_OI','CALL_VOLUME','cvper','ceprice','STRIKE','peprice','pvper','PUT_VOLUME','PUT_OI','PUT_CHNG','peper','PCRval', 'Spot_Price','CHNG.1','PUT_LTP','IV.1'],)
-            if show==True:
-                st.write(dropping_dip) 
+           
             def top12(df, val):
                 current= df[val].iloc[-1]
                 previous= df[val].iloc[-2]
@@ -536,10 +581,10 @@ with tab3:
             # Create a DataFrame of empty strings
             style_df = pd.DataFrame('', index=df.index, columns=df.columns)
             # Set colors only for the 'ce_chang' column
-            style_df['view'] = np.where(df['view']== 'Buy', 'background-color: #ed785a', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
-            style_df['Sum_PE'] = np.where(df['view']== 'Buy', 'background-color: #ed785a', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
-            style_df['Sum_CE'] = np.where(df['view']== 'Buy', 'background-color: #ed785a', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
-            style_df['Overall_Pcr'] = np.where(df['view']== 'Buy', 'background-color: #ed785a', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
+            style_df['view'] = np.where(df['view']== 'Buy', 'background-color: #27a35d', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
+            style_df['Sum_PE'] = np.where(df['view']== 'Buy', 'background-color: #27a35d', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
+            style_df['Sum_CE'] = np.where(df['view']== 'Buy', 'background-color: #27a35d', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
+            style_df['Overall_Pcr'] = np.where(df['view']== 'Buy', 'background-color: #27a35d', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
             return style_df
             
         st.write( "for getting clear view about market direction")
@@ -548,38 +593,25 @@ with tab3:
         
         col1, col2=st.columns(2)
         with col1:
-            st.write( pcr_calc)
+            st.dataframe( pcr_calc, hide_index=True)
         with col2:
             st.line_chart(pcr_calc, x='Time', y=['Overall_Pcr'], color=['#26B669'])
+        OICE_state =newdata[['ce_status']].drop_duplicates()
+        OIPE_state =newdata[['pe_status']].drop_duplicates()
+        OICEVOL_state =newdata[['volce_status']].drop_duplicates()
+        OIPEVOL_state =newdata[['volpe_status']].drop_duplicates()
+        col1, col2,col3, col4 = st.columns(4)
+        with col1:
+            st.write(OICE_state)
+        with col2:
+            st.write(OICEVOL_state)
+        with col3:
+            st.write(OIPE_state)
+        with col4:
+            st.write(OIPEVOL_state)
         L123 =newdata[['Time','ce_status', 'volce_status', 'Spot_Price','pe_status','volpe_status' ]].drop_duplicates()
         st.write(L123)
-        def nature(df,oi,vol,oi75,vol75):
-            spot= df['Spot_Price'].iloc[0]
-            both_max= df['oi'] == df['vol']
-            oi_gt= df['oi'] > df['vol']
-            vol_gt= df['vol'] > df['oi']
-            oi_wtt=(df['oi75'] != 0)& (df['oi'] < df['oi75'])
-            oi_wtb=(df['oi75'] != 0)& (df['oi'] > df['oi75'])
-            vol_wtt= (df['vol75'] != 0)& (df['vol'] < df['vol75'])
-            vol_wtb= (df['vol75'] != 0)& (df['vol'] > df['vol75'])
-            oi75_gt = df['oi75'] > df['vol75']
-            vol75_gt = df['vol75'] > df['oi75']
-            # when spot price is lessthan max/75
-            if (spot < oi)& ( spot < vol)& (oi_wtb) & (vol_wtt)& (both_max):
-                return 'OI WTB'
-            elif (spot < oi)& ( spot < vol)& (oi_wtt) & (vol_wtb)& (both_max):
-                return 'VOLUME WTB'
-            elif (spot < oi)& ( spot < vol)& (oi_wtb) & (vol_wtb)& (both_max):
-                return 'Both WTB'
-            elif (spot < oi)& ( spot < vol)& (oi_wtt) & (vol_wtt)& (both_max):
-                return 'OI WTT'
-            else:
-                return 'strong'
-        
-        #newdata['resi_view'] = nature(newdata,'cemaxstr', 'volcemaxstr', 'cesevent5str', 'volcesevent5str')
-        #st.dataframe(newdata, column_order=['Time', 'resi_view'])
-    
-        
+                
 # adding data to master file 
 
 with tab4:
