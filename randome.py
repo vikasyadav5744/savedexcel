@@ -25,38 +25,22 @@ def apply_color14(df):
     style_df['Overall_Pcr'] = np.where(df['view']== 'Buy', 'background-color: #27a35d', np.where(df['view'] =='Sell', 'background-color:#ed785a', np.where(df['view'] =='Oversold', 'background-color:red',  'background-color: #6f7a71')))
     return style_df   
 
-def apply_color(df):
-    # Create a DataFrame of empty strings
-    style_df = pd.DataFrame('', index=df.index, columns=df.columns)
-    # Set colors only for the 'ce_chang' column
-    style_df['CALL_OI'] = np.where(df['ce_chang'] < 0, 'background-color: #ed785a', np.where(df['ce_chang'] > 0, 'background-color: #325939', 'background-color: #6f7a71'))
-    style_df['ce_chang'] = np.where(df['ce_chang'] < 0, 'background-color: #ed785a', np.where(df['ce_chang'] > 0, 'background-color: #79a37e', 'background-color: #6f7a71'))
-    return style_df
-    
-def apply_color1(df):
-    # Create a DataFrame of empty strings
-    style_df = pd.DataFrame('', index=df.index, columns=df.columns)
-    # Set colors only for the 'pe_chang' column
-    style_df['PUT_OI'] = np.where(df['pe_chang'] < 0, 'background-color: #ed785a', np.where(df['pe_chang'] > 0, 'background-color: #325939', 'background-color: #6f7a71'))
-    style_df['pe_chang'] = np.where(df['pe_chang'] < 0, 'background-color: #ed785a', np.where(df['pe_chang'] > 0, 'background-color: #79a37e', 'background-color: #6f7a71'))
-    return style_df
-    
-def apply_color3(df):
-    # Create a DataFrame of empty strings
-    style_df = pd.DataFrame('', index=df.index, columns=df.columns)
-    # Set colors only for the 'ce_chang' column
-    style_df['CALL_CHNG'] = np.where(df['ce_intra'] < 0, 'background-color: #ed785a', np.where(df['ce_intra'] > 0, 'background-color: #99c9cf', 'background-color: #6f7a71'))
-    style_df['ce_intra'] = np.where(df['ce_intra'] < 0, 'background-color: #ed785a', np.where(df['ce_intra'] > 0, 'background-color: #79a37e', 'background-color: #6f7a71'))
-    return style_df
-    
-def apply_color4(df):
-    # Create a DataFrame of empty strings
-    style_df = pd.DataFrame('', index=df.index, columns=df.columns)
-    # Set colors only for the 'ce_chang' column
-    style_df['PUT_CHNG'] = np.where(df['pe_intra'] < 0, 'background-color: #ed785a', np.where(df['pe_intra'] > 0, 'background-color:#99c9cf', 'background-color: #6f7a71'))
-    style_df['pe_intra'] = np.where(df['pe_intra'] < 0, 'background-color: #ed785a', np.where(df['pe_intra'] > 0, 'background-color: #79a37e', 'background-color: #6f7a71'))
-    return style_df
 
+
+def apply_color007(df):
+    # Create a DataFrame of empty strings
+    style_df = pd.DataFrame('', index=df.index, columns=df.columns)
+    # Set colors only for the 'ce_chang' column
+    style_df['CALL_OI'] = np.where(df['ce_chang'] < 0, 'background-color: #83a383', np.where(df['ce_chang'] > 0, 'background-color: #1a401a', 'background-color: #6f7a71'))
+    style_df['ce_chang'] = np.where(df['ce_chang'] < 0, 'background-color: #83a383', np.where(df['ce_chang'] > 0, 'background-color: #1a401a', 'background-color: #6f7a71'))
+    style_df['PUT_OI'] = np.where(df['pe_chang'] < 0, 'background-color: #83a383', np.where(df['pe_chang'] > 0, 'background-color: #1a401a', 'background-color: #6f7a71'))
+    style_df['pe_chang'] = np.where(df['pe_chang'] < 0, 'background-color: #83a383', np.where(df['pe_chang'] > 0, 'background-color: #1a401a', 'background-color: #6f7a71'))
+    
+    style_df['CALL_CHNG'] = np.where(df['ce_intra'] < 0, 'background-color:#8a91b5', np.where(df['ce_intra'] > 0, 'background-color: #2a325c', 'background-color: #6f7a71'))
+    style_df['ce_intra'] = np.where(df['ce_intra'] < 0, 'background-color: #8a91b5', np.where(df['ce_intra'] > 0, 'background-color: #2a325c', 'background-color: #6f7a71'))
+    style_df['PUT_CHNG'] = np.where(df['pe_intra'] < 0, 'background-color: #8a91b5', np.where(df['pe_intra'] > 0, 'background-color:#2a325c', 'background-color: #6f7a71'))
+    style_df['pe_intra'] = np.where(df['pe_intra'] < 0, 'background-color:#8a91b5', np.where(df['pe_intra'] > 0, 'background-color: #2a325c', 'background-color: #6f7a71'))
+    return style_df
 
 def nature(df, oi, vol, oi75, vol75):
     # Ensure we are looking at specific values, not columns
@@ -370,9 +354,12 @@ with tab3:
     newdata201 = st.file_uploader("upload historical file", key='newdata201')
     if newdata201 is not None:
         newdata203=pd.read_csv(newdata201, encoding='latin_1')
+        ex_opt= newdata203['Expiry'].unique()
         opt= newdata203['Date'].unique()
+        expiry1= st.selectbox(" please choose date", options=ex_opt, key='date002')
+        newdata107= newdata203[ newdata203['Expiry']== expiry1]
         optdate1= st.selectbox(" please choose date", options=opt, key='date001')
-        newdata= newdata203[ newdata203['Date']== optdate1]
+        newdata= newdata107[ newdata107['Date']== optdate1]
         newdata['volceprice']= newdata['STRIKE']+((newdata['PUT_VOLUME']/newdata['CALL_VOLUME'])*50)
         newdata['volpeprice']= newdata['STRIKE']-((newdata['PUT_VOLUME']/newdata['CALL_VOLUME'])*50)
         newdata = newdata.drop_duplicates(subset=['Time', 'STRIKE'], keep='first', ignore_index=True)
@@ -584,7 +571,7 @@ with tab3:
                         chart_chng6= st.selectbox("select the begning Time",options=strikes, key='chart_chng6', index=tel6_strike)
                         chart_chng_data6=newdata[newdata['STRIKE']==chart_chng6][['Time','CALL_CHNG','PUT_CHNG']].sort_values(by='Time', ascending=False)
                         st.line_chart(chart_chng_data6, x='Time', y=['CALL_CHNG', 'PUT_CHNG'], color=['#B62626', '#26B669']) 
-                    col1, col2, col3=st.columns(3)
+                    col1, col2=st.columns(2)
                     with col1:
                         strike_0= st.selectbox("select the begning STRIKE", options=strikes, key='strike0', index=tel3_strike)
                         strike_detail0 =newdata[newdata['STRIKE']==strike_0][['Time','CALL_OI', 'PUT_OI','CALL_CHNG', 'PUT_CHNG']]
@@ -594,7 +581,7 @@ with tab3:
                         strike_detail0['ce_intra'] =strike_detail0['CALL_CHNG'].diff().fillna(0)
                         strike_detail0['pe_intra'] =strike_detail0['PUT_CHNG'].diff().fillna(0)
                         strike_detail0 = strike_detail0.sort_values(by=['Time'], ascending= False)
-                        strike_detail0= strike_detail0.style.apply(apply_color, axis=None).apply(apply_color1, axis=None).apply(apply_color3, axis=None).apply(apply_color4, axis=None).format(precision=0).format(precision=2, subset=['Time'])
+                        strike_detail0= strike_detail0.style.apply(apply_color007, axis=None).format(precision=0).format(precision=2, subset=['Time'])
                         st.dataframe(strike_detail0,hide_index=True, column_order=['Time','ce_chang','CALL_OI','PUT_OI', 'pe_chang', 'ce_intra', 'CALL_CHNG','PUT_CHNG','pe_intra'],height=400)
                     with col2:
                         strike_one= st.selectbox("select the begning STRIKE", options=strikes, key='strike', index=tel4_strike)
@@ -605,9 +592,10 @@ with tab3:
                         strike_detail['ce_intra'] =strike_detail['CALL_CHNG'].diff().fillna(0)
                         strike_detail['pe_intra'] =strike_detail['PUT_CHNG'].diff().fillna(0)
                         strike_detail = strike_detail.sort_values(by=['Time'], ascending= False)
-                        strike_detail= strike_detail.style.apply(apply_color, axis=None).apply(apply_color1, axis=None).apply(apply_color3, axis=None).apply(apply_color4, axis=None).format(precision=0).format(precision=2, subset=['Time'])
+                        strike_detail= strike_detail.style.apply(apply_color007, axis=None).format(precision=0).format(precision=2, subset=['Time'])
                         st.dataframe(strike_detail, hide_index=True,  column_order=['Time','ce_chang','CALL_OI','PUT_OI', 'pe_chang', 'ce_intra', 'CALL_CHNG','PUT_CHNG','pe_intra'], height=400)
-                    with col3:
+                    col1, col2=st.columns(2)
+                    with col1:
                         strike_1= st.selectbox("select the begning STRIKE", options=strikes, key='strike1', index=tel5_strike)
                         strike_detail1 =newdata[newdata['STRIKE']==strike_1][['Time','CALL_OI', 'PUT_OI','CALL_CHNG', 'PUT_CHNG']]
                         strike_detail1 = strike_detail1.sort_values(by=['Time'])
@@ -616,8 +604,21 @@ with tab3:
                         strike_detail1['ce_intra'] =strike_detail1['CALL_CHNG'].diff().fillna(0)
                         strike_detail1['pe_intra'] =strike_detail1['PUT_CHNG'].diff().fillna(0)
                         strike_detail1 = strike_detail1.sort_values(by=['Time'], ascending= False)  
-                        strike_detail1= strike_detail1.style.apply(apply_color, axis=None).apply(apply_color1, axis=None).apply(apply_color3, axis=None).apply(apply_color4, axis=None).format(precision=0).format(precision=2, subset=['Time'])
-                        st.dataframe(strike_detail1,hide_index=True, column_order=['Time','ce_chang','CALL_OI','PUT_OI', 'pe_chang', 'ce_intra', 'CALL_CHNG','PUT_CHNG','pe_intra'], height=400)             
+                        strike_detail1= strike_detail1.style.apply(apply_color007, axis=None).format(precision=0).format(precision=2, subset=['Time'])
+                        st.dataframe(strike_detail1,hide_index=True, column_order=['Time','ce_chang','CALL_OI','PUT_OI', 'pe_chang', 'ce_intra', 'CALL_CHNG','PUT_CHNG','pe_intra'], height=400) 
+                    with col2:
+                        strike_201= st.selectbox("select the begning STRIKE", options=strikes, key='strike201', index=tel6_strike)
+                        strike_detail121 =newdata[newdata['STRIKE']==strike_201][['Time','CALL_OI', 'PUT_OI','CALL_CHNG', 'PUT_CHNG']]
+                        strike_detail121 = strike_detail121.sort_values(by=['Time'])
+                        strike_detail121['ce_chang'] =strike_detail121['CALL_OI'].diff().fillna(0)
+                        strike_detail121['pe_chang'] =strike_detail121['PUT_OI'].diff().fillna(0)
+                        strike_detail121['ce_intra'] =strike_detail121['CALL_CHNG'].diff().fillna(0)
+                        strike_detail121['pe_intra'] =strike_detail121['PUT_CHNG'].diff().fillna(0)
+                        strike_detail121 = strike_detail121.sort_values(by=['Time'], ascending= False)  
+                        # strike_detail121= strike_detail121.style.apply(apply_color, axis=None).apply(apply_color1, axis=None).apply(apply_color3, axis=None).apply(apply_color4, axis=None).format(precision=0).format(precision=2, subset=['Time'])
+                        strike_detail121= strike_detail121.style.apply(apply_color007, axis=None).format(precision=0).format(precision=2, subset=['Time'])
+                        st.dataframe(strike_detail121,hide_index=True, column_order=['Time','ce_chang','CALL_OI','PUT_OI', 'pe_chang', 'ce_intra', 'CALL_CHNG','PUT_CHNG','pe_intra'], height=400)
+                        
             if shifting_change ==True:
                 OICE_state =newdata[['ce_status']].drop_duplicates()
                 OIPE_state =newdata[['pe_status']].drop_duplicates()
